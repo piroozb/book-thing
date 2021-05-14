@@ -9,6 +9,9 @@ WindowManager:
 <LoginPage>:
     name: 'login'
 
+    user: user
+    passw: pass1
+
     FloatLayout:
         size: root.width, root.height/2
 
@@ -32,10 +35,11 @@ WindowManager:
             font_size: (root.width**2 + root.height**2) / 14**4
 
         TextInput:
-            id: pass
+            id: pass1
             multiline: False
             pos_hint: {"x":0.5, "top":0.8-0.13*2}
             size_hint: 0.4, 0.12
+            password: True
             font_size: (root.width**2 + root.height**2) / 14**4
 
         Button:
@@ -55,6 +59,7 @@ WindowManager:
             # make it an if else based on what they put (check list of user
             # or something)
             on_release:
+                root.btn()
                 app.root.current = 'home'
                 root.manager.transition.direction = 'left'
 
@@ -78,7 +83,7 @@ WindowManager:
                 text: 'Password: '
 
             TextInput:
-                id: pass
+                id: pass1
                 multiline: False
 
             Label:
