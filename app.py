@@ -13,10 +13,17 @@ from kivy.graphics import Line
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.popup import Popup
+import bcrypt
 
 
 class LoginPage(Screen):
-    pass
+    user = ObjectProperty(None)
+    passw = ObjectProperty(None)
+
+    def btn(self):
+        print(f'{self.user.text} and {self.passw.text}')
+
+        self.passw.text = self.user.text = ''
 
 
 class RegisterPage(Screen):
