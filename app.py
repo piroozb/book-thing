@@ -91,8 +91,8 @@ class RegisterPage(Screen):
     pass2 = ObjectProperty(None)
 
     def btn_register(self) -> bool:
-        if self.pass1.text != self.pass2.text or 8 > len(self.pass1.text) > 40\
-                or ' ' in self.pass1.text:
+        if self.pass1.text != self.pass2.text or 40 < len(self.user.text) or\
+                len(self.user.text) < 8 or ' ' in self.pass1.text:
             fail_popup(True)
             self.pass1.text = self.user.text = self.pass2.text = ''
             return False
@@ -111,7 +111,8 @@ class RegisterPage(Screen):
         #     user_dict = {}
 
         self.pass1.text = self.user.text = self.pass2.text = ''
-        if data_user is not None:
+        if data_user is not None or 32 < len(user) or \
+                len(user) < 6 or ' ' in user:
             fail_popup(False)
             return False
         else:
