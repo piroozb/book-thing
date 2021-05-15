@@ -18,7 +18,6 @@ from kivy.uix.popup import Popup
 from kivy.core.window import Window
 from kivymd.app import MDApp
 import bcrypt
-import json
 from datetime import date
 from pymongo import MongoClient
 from dotenv import load_dotenv
@@ -27,7 +26,6 @@ load_dotenv('.env')
 cluster = MongoClient(os.getenv('VAL'))
 db = cluster["BookData"]
 collection = db["books"]
-# import os
 
 
 # helper function
@@ -54,24 +52,12 @@ class LoginPage(Screen):
     def btn_login(self) -> bool:
         user = self.user.text
         password = self.pass1.text.encode()
-        data_user = collection.find_one({"_id": user})
         # gets the information from the database.
-
-        # if os.path.getsize('user.json') > 0:
-        #     file = open('user.json')
-        #     user_dict = json.load(file)
-        # else:
-        #     fail_popup(False)
-        #     return False
-        # if user not in user_dict:
-        #     fail_popup(False)
-        #     return False
-
+        data_user = collection.find_one({"_id": user})
         if data_user is None:
             fail_popup(False)
             return False
         else:
-            # hashed = user_dict[user][0]
             # currently hashed is a str of the hashed password
             hashed = data_user["password"]
         # clears textbox
@@ -104,12 +90,6 @@ class RegisterPage(Screen):
         hashed = bcrypt.hashpw(password, bcrypt.gensalt(rounds=12))
         data_user = collection.find_one({"_id": user})
 
-        # if os.path.getsize('user.json') > 0:
-        #     file = open('user.json', 'r')
-        #     user_dict = json.load(file)
-        # else:
-        #     user_dict = {}
-
         self.pass1.text = self.user.text = self.pass2.text = ''
         if data_user is not None or 32 < len(user) or \
                 len(user) < 6 or ' ' in user:
@@ -119,14 +99,6 @@ class RegisterPage(Screen):
             collection.insert_one({"_id": user, "password": hashed.decode(),
                                    "date": str(date.today())})
             return True
-        # if user in user_dict.keys() or 6 > len(user) > 32:
-        #     fail_popup(False)
-        #     return False
-        # else:
-        #     user_dict[user] = [str(hashed), str(date.today()), '0']
-        #     with open('user.json', 'w') as f:
-        #         json.dump(user_dict, f)
-        #     return True
 
 
 class UserPage(Screen):
@@ -135,14 +107,6 @@ class UserPage(Screen):
 
 class HomePage(Screen):
     pass
-
-
-# class FeedPage(Screen):
-#     pass
-#
-#
-# class BookPage(Screen):
-#     pass
 
 
 class WindowManager(ScreenManager):
