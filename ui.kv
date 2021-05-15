@@ -106,6 +106,18 @@ WindowManager:
 <HomePage>:
     name: 'home'
 
+    FloatLayout:
+
+        Image:
+            source: 'images/HomePage/logo.png'
+            pos_hint: {"center_x": 0.5, "top": 1}
+
+        MDTextField:
+            size_hint: 0.2, 0.05
+            pos_hint: {"center": (0.5, 0.8)}
+            hint_text: 'search for a book!'
+            mode: 'rectangle'
+
 <FeedPage>:
     name: 'feed'
 

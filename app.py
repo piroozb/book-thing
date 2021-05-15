@@ -13,6 +13,8 @@ from kivy.graphics import Line
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.popup import Popup
+from kivy.core.window import Window
+from kivymd.app import MDApp
 
 
 class LoginPage(Screen):
@@ -43,13 +45,10 @@ class WindowManager(ScreenManager):
     pass
 
 
-kv = Builder.load_file('ui.kv')
-
-
-class BookApp(App):
+class BookApp(MDApp):
     """Class that builds and runs the app"""
     def build(self):
-        return kv
+        return Builder.load_file('ui.kv')
 
 
 if __name__ == "__main__":
