@@ -15,6 +15,8 @@ class User:
         - the password of the user
     favourites:
         - all of the user's favourite publications
+    bio:
+        - biography of the user
 
     === Private Attributes ===
     _join_date:
@@ -25,6 +27,7 @@ class User:
     following: Set[str]
     _join_date: date
     favourites: List[Publication]
+    bio: str
     # list? Dict?
 
     def __init__(self, user_name: str) -> None:
@@ -32,9 +35,13 @@ class User:
         self.following = set()
         self._join_date = date.today()
         self.favourites = []
+        self.bio = ''
 
     def add_favourite(self, publication: Publication) -> None:
         self.favourites.append(publication)
+
+    def add_bio(self, bio: str) -> None:
+        self.bio = bio
 
 
 class Post:

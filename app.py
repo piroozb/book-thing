@@ -18,7 +18,21 @@ from kivymd.app import MDApp
 
 
 class LoginPage(Screen):
-    pass
+    # saves the username and password inputted from the .kv file
+    user = ObjectProperty(None)
+    passw = ObjectProperty(None)
+
+    def btn(self):
+        print(f'{self.user.text} and {self.passw.text}')
+        # converts password to bytes then encrypts it.
+        password = self.passw.text.encode()
+        # TODO: maybe add more rounds to make the password take longer to
+        #  hash (for more security).
+        hashed = bcrypt.hashpw(password, bcrypt.gensalt(rounds=12))
+        print(hashed)
+        # bcrypt.checkpw(password, hashed)
+        # used to check if hash corresponds with password
+        self.passw.text = self.user.text = ''
 
 
 class RegisterPage(Screen):
