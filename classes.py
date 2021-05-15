@@ -29,7 +29,6 @@ class User:
     _join_date: date
     favourites: List[Publication]
     bio: str
-    _id: str
     # list? Dict?
 
     def __init__(self, user_name: str) -> None:
@@ -38,7 +37,6 @@ class User:
         self._join_date = date.today()
         self.favourites = []
         self.bio = ''
-        self._id = str(uuid.uuid4())
 
     def add_favourite(self, publication: Publication) -> None:
         self.favourites.append(publication)
@@ -141,12 +139,14 @@ class Publication:
         - ratings posted by users
     thread:
         - a list of posts made by users
+
     """
     title: str
     author: str
     genre: str
     ratings: List[Rating]
     thread: List[Comment]
+    _id: str
 
     def __init__(self, title: str, author: str, genre: str) -> None:
         self.title = title
@@ -154,6 +154,7 @@ class Publication:
         self.genre = genre
         self.ratings = []
         self.thread = []
+        self._id = str(uuid.uuid4())
 
     def add_rating(self, new_rating: Rating) -> None:
         """Add a rating to this publication"""
