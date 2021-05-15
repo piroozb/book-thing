@@ -50,6 +50,7 @@ class LoginPage(Screen):
     pass1 = ObjectProperty(None)
 
     def btn_login(self) -> bool:
+        """Method for when someone tries to login"""
         user = self.user.text
         password = self.pass1.text.encode()
         # gets the information from the database.
@@ -77,8 +78,11 @@ class RegisterPage(Screen):
     pass2 = ObjectProperty(None)
 
     def btn_register(self) -> bool:
-        if self.pass1.text != self.pass2.text or 40 < len(self.user.text) or\
-                len(self.user.text) < 8 or ' ' in self.pass1.text:
+        """Method for when someone tries to register"""
+        # checks if passwords match, has the right characters and is not too
+        # long/short
+        if self.pass1.text != self.pass2.text or 40 < len(self.password.text) \
+                or len(self.password.text) < 8 or ' ' in self.pass1.text:
             fail_popup(True)
             self.pass1.text = self.user.text = self.pass2.text = ''
             return False
@@ -91,11 +95,14 @@ class RegisterPage(Screen):
         data_user = collection.find_one({"_id": user})
 
         self.pass1.text = self.user.text = self.pass2.text = ''
+        # checks if user already exists, has the right characters and is not too
+        # long/short
         if data_user is not None or 32 < len(user) or \
                 len(user) < 6 or ' ' in user:
             fail_popup(False)
             return False
         else:
+            # uploads info to the database
             collection.insert_one({"_id": user, "password": hashed.decode(),
                                    "date": str(date.today())})
             return True
