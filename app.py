@@ -1,3 +1,5 @@
+import os
+
 import kivy
 from kivy.app import App
 from kivy.uix.label import Label
@@ -18,7 +20,23 @@ from kivymd.app import MDApp
 import bcrypt
 import json
 from datetime import date
-import os
+from pymongo import MongoClient
+from dotenv import load_dotenv
+
+load_dotenv('.env')
+cluster = MongoClient(os.getenv('VAL'))
+db = cluster["BookData"]
+collection = db["books"]
+# import os
+
+
+# helper function
+def fail_popup(retype: bool) -> None:
+    show = Pop2() if retype else Pop()
+
+    popup_win = Popup(title='Error', content=show, size_hint=(None, None),
+                      size=(350, 100))
+    popup_win.open()
 
 
 class Pop(FloatLayout):
@@ -30,15 +48,40 @@ class Pop2(FloatLayout):
 
 
 class LoginPage(Screen):
-    pass
+    user = ObjectProperty(None)
+    pass1 = ObjectProperty(None)
 
+    def btn_login(self) -> bool:
+        user = self.user.text
+        password = self.pass1.text.encode()
+        data_user = collection.find_one({"_id": user})
+        # gets the information from the database.
 
-def fail_popup(retype: bool) -> None:
-    show = Pop2() if retype else Pop()
+        # if os.path.getsize('user.json') > 0:
+        #     file = open('user.json')
+        #     user_dict = json.load(file)
+        # else:
+        #     fail_popup(False)
+        #     return False
+        # if user not in user_dict:
+        #     fail_popup(False)
+        #     return False
 
-    popup_win = Popup(title='Error', content=show, size_hint=(None, None),
-                      size=(350, 100))
-    popup_win.open()
+        if data_user is None:
+            fail_popup(False)
+            return False
+        else:
+            # hashed = user_dict[user][0]
+            # currently hashed is a str of the hashed password
+            hashed = data_user["password"]
+        # clears textbox
+        self.pass1.text = self.user.text = ''
+        # used to check if hash corresponds with password
+        if bcrypt.checkpw(password, hashed.encode()):
+            return True
+        else:
+            fail_popup(True)
+            return False
 
 
 class RegisterPage(Screen):
@@ -48,7 +91,8 @@ class RegisterPage(Screen):
     pass2 = ObjectProperty(None)
 
     def btn_register(self) -> bool:
-        if self.pass1.text != self.pass2.text:
+        if self.pass1.text != self.pass2.text or 8 > len(self.pass1.text) > 40\
+                or ' ' in self.pass1.text:
             fail_popup(True)
             self.pass1.text = self.user.text = self.pass2.text = ''
             return False
@@ -58,24 +102,30 @@ class RegisterPage(Screen):
         # TODO: maybe add more rounds to make the password take longer to
         #  hash (for more security).
         hashed = bcrypt.hashpw(password, bcrypt.gensalt(rounds=12))
-        # bcrypt.checkpw(password, hashed)
-        # used to check if hash corresponds with password
-        if os.path.getsize('user.json') > 0:
-            file = open('user.json')
-            user_dict = json.load(file)
-        else:
-            user_dict = {}
+        data_user = collection.find_one({"_id": user})
+
+        # if os.path.getsize('user.json') > 0:
+        #     file = open('user.json', 'r')
+        #     user_dict = json.load(file)
+        # else:
+        #     user_dict = {}
 
         self.pass1.text = self.user.text = self.pass2.text = ''
-
-        if user in user_dict.keys():
+        if data_user is not None:
             fail_popup(False)
             return False
         else:
-            user_dict[user] = [str(hashed), str(date.today())]
-            with open('user.json', 'w') as f:
-                json.dump(user_dict, f)
+            collection.insert_one({"_id": user, "password": hashed.decode(),
+                                   "date": str(date.today())})
             return True
+        # if user in user_dict.keys() or 6 > len(user) > 32:
+        #     fail_popup(False)
+        #     return False
+        # else:
+        #     user_dict[user] = [str(hashed), str(date.today()), '0']
+        #     with open('user.json', 'w') as f:
+        #         json.dump(user_dict, f)
+        #     return True
 
 
 class UserPage(Screen):
