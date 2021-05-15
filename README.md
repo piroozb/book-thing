@@ -3,6 +3,7 @@
 ## Technology used
 -   Python (back-end)
 -   Kivy (front-end)
+-   Bcrypt (database)
 -   Mongodb (database)
 -   figma (front-end)
 
