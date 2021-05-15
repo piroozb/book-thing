@@ -72,7 +72,8 @@ WindowManager:
             # make it an if else based on what they put (check list of user
             # or something)
             on_release:
-                app.root.current = 'home'
+                val = root.btn_register()
+                app.root.current = 'home' if val else 'login'
                 root.manager.transition.direction = 'left'
 
 <RegisterPage>:
@@ -116,7 +117,6 @@ WindowManager:
                 on_release:
                     val = root.btn_register()
                     app.root.current = 'home' if val else 'register'
-                    app.root.current = 'home'
         Button:
             text: 'Back to login'
             on_release:
