@@ -86,12 +86,12 @@ class HomePage(Screen):
     pass
 
 
-class FeedPage(Screen):
-    pass
-
-
-class BookPage(Screen):
-    pass
+# class FeedPage(Screen):
+#     pass
+#
+#
+# class BookPage(Screen):
+#     pass
 
 
 class WindowManager(ScreenManager):

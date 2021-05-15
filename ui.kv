@@ -128,21 +128,51 @@ WindowManager:
 
 <HomePage>:
     name: 'home'
+    MDBoxLayout:
+        orientation: 'vertical'
+        spacing: self.height / 30
 
-    FloatLayout:
+        MDToolbar:
+            md_bg_color: (255/255, 139/255, 56/255, 255/255)
+            FloatLayout:
+                Image:
+                    source: 'images/HomePage/logo.png'
+                    size_hint_y: 0.8
+                    pos_hint: {"center_x": 0, "center_y": 0.5}
 
-        Image:
-            source: 'images/HomePage/logo.png'
-            pos_hint: {"center_x": 0.5, "top": 1}
 
-        MDTextField:
-            size_hint: 0.2, 0.05
-            pos_hint: {"center": (0.5, 0.8)}
-            hint_text: 'search for a book!'
-            mode: 'rectangle'
+        MDBottomNavigation:
+            panel_color: 255/255, 139/255, 56/255, 255/255
+            MDBottomNavigationItem:
+                name: 'home_page'
+                text: 'Book Search'
+                icon: 'book-search-outline'
+                BoxLayout:
+                    orientation: 'vertical'
 
-<FeedPage>:
-    name: 'feed'
+                    MDTextField:
+                        size_hint_x: 0.5
+                        pos_hint: {"center_x": 0.5}
+                        hint_text: 'search for a book!'
+                        icon_right: 'magnify'
 
-<BookPage>:
-    name: 'book'
+                    BoxLayout
+
+
+
+            MDBottomNavigationItem:
+                name: 'feed_page'
+                text: 'Notifications'
+                icon: 'bell'
+
+            MDBottomNavigationItem:
+                name: 'profile_page'
+                text: 'Profile'
+                icon: 'account-circle'
+
+#
+#<FeedPage>:
+#    name: 'feed'
+#
+#<BookPage>:
+#    name: 'book'
