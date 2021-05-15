@@ -16,8 +16,9 @@ from kivy.uix.popup import Popup
 from kivy.core.window import Window
 from kivymd.app import MDApp
 import bcrypt
-import pickle
+import json
 from datetime import date
+import os
 
 
 class Pop(FloatLayout):
@@ -32,6 +33,14 @@ class LoginPage(Screen):
     pass
 
 
+def fail_popup(retype: bool) -> None:
+    show = Pop2() if retype else Pop()
+
+    popup_win = Popup(title='Error', content=show, size_hint=(None, None),
+                      size=(350, 100))
+    popup_win.open()
+
+
 class RegisterPage(Screen):
     # saves the username and password inputted from the .kv file
     user = ObjectProperty(None)
@@ -40,35 +49,33 @@ class RegisterPage(Screen):
 
     def btn_register(self) -> bool:
         if self.pass1.text != self.pass2.text:
-            self.fail_popup(True)
+            fail_popup(True)
+            self.pass1.text = self.user.text = self.pass2.text = ''
             return False
-        print(f'{self.user.text} and {self.pass1.text}')
         # converts password to bytes then encrypts it.
+        user = self.user.text
         password = self.pass1.text.encode()
         # TODO: maybe add more rounds to make the password take longer to
         #  hash (for more security).
         hashed = bcrypt.hashpw(password, bcrypt.gensalt(rounds=12))
-        print(hashed)
         # bcrypt.checkpw(password, hashed)
         # used to check if hash corresponds with password
-        pickle_file = open('user.pkl', 'rb')
-        user_dict = pickle.load(pickle_file)
-        if self.user.text in user_dict.keys():
-            self.fail_popup(False)
+        if os.path.getsize('user.json') > 0:
+            file = open('user.json')
+            user_dict = json.load(file)
+        else:
+            user_dict = {}
+
+        self.pass1.text = self.user.text = self.pass2.text = ''
+
+        if user in user_dict.keys():
+            fail_popup(False)
             return False
         else:
-            user_dict[self.user.text] = [hashed, date.today()]
-            with open('user.pkl', 'wb') as f:
-                pickle.dump(user_dict, f)
-            self.passw.text = self.user.text = ''
+            user_dict[user] = [str(hashed), str(date.today())]
+            with open('user.json', 'w') as f:
+                json.dump(user_dict, f)
             return True
-
-    def fail_popup(self, retype: bool) -> None:
-        show = Pop2() if retype else Pop()
-
-        popup_win = Popup(title='Error', content=show, size_hint=(None, None),
-                          size=(100, 100))
-        popup_win.open()
 
 
 class UserPage(Screen):
