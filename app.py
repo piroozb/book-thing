@@ -15,6 +15,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.popup import Popup
 from kivy.core.window import Window
 from kivymd.app import MDApp
+import bcrypt
 
 
 class LoginPage(Screen):
