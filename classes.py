@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Set, List, Optional
 from datetime import date
+import uuid
 
 
 class User:
@@ -28,6 +29,7 @@ class User:
     _join_date: date
     favourites: List[Publication]
     bio: str
+    _id: str
     # list? Dict?
 
     def __init__(self, user_name: str) -> None:
@@ -36,6 +38,7 @@ class User:
         self._join_date = date.today()
         self.favourites = []
         self.bio = ''
+        self._id = str(uuid.uuid4())
 
     def add_favourite(self, publication: Publication) -> None:
         self.favourites.append(publication)

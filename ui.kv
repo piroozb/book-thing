@@ -6,6 +6,18 @@ WindowManager:
     FeedPage:
     BookPage:
 
+<Pop>:
+    Label:
+        text: 'Registry failed: username already taken!'
+        size_hint: 0.5, 0.2
+        pos_hint: {'x':0.2, 'top':1}
+
+<Pop2>:
+    Label:
+        text: "Registry failed: passwords doesn't match!"
+        size_hint: 0.5, 0.2
+        pos_hint: {'x':0.2, 'top':1}
+
 <LoginPage>:
     name: 'login'
 
@@ -31,6 +43,7 @@ WindowManager:
         Label:
             text: 'Password: '
             size_hint: 0.8, 0.2
+            password: True
             pos_hint: {"x":-0.1, "top":0.8-0.13*2}
             font_size: (root.width**2 + root.height**2) / 14**4
 
@@ -59,12 +72,15 @@ WindowManager:
             # make it an if else based on what they put (check list of user
             # or something)
             on_release:
-                root.btn()
                 app.root.current = 'home'
                 root.manager.transition.direction = 'left'
 
 <RegisterPage>:
     name: 'register'
+
+    user: user
+    pass1: pass1
+    pass2: pass2
 
     GridLayout:
         cols: 1
@@ -84,6 +100,7 @@ WindowManager:
 
             TextInput:
                 id: pass1
+                password: True
                 multiline: False
 
             Label:
@@ -91,13 +108,14 @@ WindowManager:
 
             TextInput:
                 id: pass2
+                password: True
                 multiline: False
 
             Button:
                 text: 'Register'
-                # make it an if else based on what they put (check list of user
-                # or something)
                 on_release:
+                    val = root.btn_register()
+                    app.root.current = 'home' if val else 'register'
                     app.root.current = 'home'
         Button:
             text: 'Back to login'
