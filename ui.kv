@@ -78,7 +78,7 @@ WindowManager:
                 pos_hint: {'center_x': 0.5}
                 on_release:
                     val = root.btn_login()
-                    app.root.current = 'home' # if val else 'login'
+                    app.root.current = 'home' if val else 'login'
                     if val: \
                     app.update_publication_grid()
                     root.manager.transition.direction = 'left'
@@ -191,14 +191,63 @@ WindowManager:
                 text: 'Notifications'
                 icon: 'bell'
 
+                MDBoxLayout:
+                    orientation: 'vertical'
+
+#                    ScrollView:
+#                        do_scroll_x: False
+#                        do_scroll_y: True
+#                        GridLayout:
+#                            id: book_grid
+#                            cols: 1
+#                            spacing: 10
+#                            size_hint_y: None
+#                            # do not delete this^ line
+#                            size_hint_x: 1
+#                            height: self.minimum_height
+
+
+# this is code for personal profile page
             MDBottomNavigationItem:
                 name: 'profile_page'
                 text: 'Profile'
                 icon: 'account-circle'
 
-#
-#<FeedPage>:
-#    name: 'feed'
-#
-#<BookPage>:
-#    name: 'book'
+                MDBoxLayout:
+                    orientation: 'vertical'
+                    spacing: self.height / 40
+
+                    Image: # profile pic
+                        source:'images/Demo/Profile/person1.png'
+                        size_hint_y: 0.8
+                        pos_hint: {"center": (-.8, 0.5)}
+
+                    Label: # username
+                        pos_hint: {"center_x": 0.5}
+                        color: (0, 0, 0, 1)
+                        text: "USER001"
+
+                    Label: # bio
+                        pos_hint: {"center_x": 0.5}
+                        color: (0, 0, 0, 1)
+                        text: "Insert an interesting bio here. Or quirky jokes."
+
+                        BoxLayout: # container for 3 posts
+                            orientation: 'vertical'
+                            id: recent_posts
+
+#                            MDBoxLayout:
+#                                id: recent_post1
+#                                d = 'images/Demo/Books/1984.png'
+#                                c = "I hated this book"
+#                                self.add_widget(format_comment_preview())
+#                            MDBoxLayout:
+#                                id: recent_post2
+#                                d = 'images/Demo/Books/IHaveTheRightToDestroyMyself.png'
+#                                c = "I loved this! Couldn't put it down."
+#                                self.add_widget(format_comment_preview())
+#                            MDBoxLayout:
+#                                id: recent_post3
+#                                d = 'images/Demo/Books/NoPlaceLikeHere.png'
+#                                c = "What a wonderful book!"
+#                                self.add_widget(format_comment_preview())
