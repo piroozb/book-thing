@@ -210,6 +210,8 @@ WindowManager:
                         icon_right: 'magnify'
                         helper_text: "Don't see your book? Search its name to add it!"
                         helper_text_mode: 'on_focus'
+                        on_text:
+                            app.update_publication_grid(self.text)
 
                     ScrollView:
                         do_scroll_x: False
@@ -219,7 +221,6 @@ WindowManager:
                             cols: 2
                             spacing: 10
                             size_hint_y: None
-                            # do not delete this^ line
                             size_hint_x: 1
                             height: self.minimum_height
 
@@ -231,17 +232,6 @@ WindowManager:
                 MDBoxLayout:
                     orientation: 'vertical'
 
-#                    ScrollView:
-#                        do_scroll_x: False
-#                        do_scroll_y: True
-#                        GridLayout:
-#                            id: book_grid
-#                            cols: 1
-#                            spacing: 10
-#                            size_hint_y: None
-#                            # do not delete this^ line
-#                            size_hint_x: 1
-#                            height: self.minimum_height
 
 
 # this is code for personal profile page
@@ -250,22 +240,28 @@ WindowManager:
                 text: 'Profile'
                 icon: 'account-circle'
 
-                FloatLayout:
+                MDFloatLayout:
 
                     Image: # profile pic
                         source:'images/Demo/Profile/person1.png'
-                        size_hint_y: 0.4
-                        pos_hint: {"center_x": .2}
+                        size_hint_y: 0.2
+                        pos_hint: {"center_x": .2, "center_y": 0.9}
 
-                    Label: # username
-                        pos_hint: {"center_x": 0.5}
-                        color: (0, 0, 0, 1)
-                        text: "USER001"
+                    MDBoxLayout:
+                        size_hint: 0.6, 0.2
+                        pos_hint: {"center_x": .7, "center_y": 0.9}
+                        orientation: 'vertical'
 
-                    Label: # bio
-                        pos_hint: {"center_x": 0.5}
-                        color: (0, 0, 0, 1)
-                        text: "Insert an interesting bio here.\nOr quirky jokes."
+                        MDLabel: # username
+                            halign: "center"
+                            color: (0, 0, 0, 1)
+                            font_style: 'H6'
+                            text: "USER001"
+
+                        MDLabel: # bio
+                            halign: "center"
+                            color: (0, 0, 0, 1)
+                            text: "Insert an interesting bio here.\nOr quirky jokes."
 
 
                     BoxLayout: # container for 3 posts

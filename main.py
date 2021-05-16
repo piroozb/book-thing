@@ -1,25 +1,9 @@
 from typing import Optional, List
 from classes import Publication, Book, Comment
 import os
-import kivy
-from kivy.app import App
-from kivy.uix.label import Label
-from kivy.uix.textinput import TextInput
-from kivy.uix.button import Button
-from kivy.uix.widget import Widget
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty
-from kivy.uix.floatlayout import FloatLayout
-from kivy.properties import ObjectProperty
-from kivy.graphics import Rectangle
-from kivy.graphics import Color
-from kivy.graphics import Line
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.uix.image import Image
-from kivy.uix.popup import Popup
-from kivy.core.window import Window
 from kivymd.app import MDApp
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.label import MDLabel
@@ -193,8 +177,11 @@ class BookApp(MDApp):
                      Book('Why We Sleep', 'Matthew Walker', 'Fiction', 190)
                      ]
             for i in range(9):
-                buttons.append(
-                    self.build_publication_button(img_paths[i], books[i]), )
+                book = books[i]
+                if search_keywords is None or search_keywords.lower() in \
+                        (book.title + book.author).lower():
+                    buttons.append(
+                        self.build_publication_button(img_paths[i], books[i]))
             return buttons
         else:
             # access database and based on search, add books from there
@@ -209,6 +196,7 @@ class BookApp(MDApp):
         return button
 
     def change_screens(self, *args) -> None:
+        self.root.transition.direction = 'left'
         self.root.current = 'book_info'
 
     def update_recent_comments(self) -> None:
@@ -249,7 +237,9 @@ class BookApp(MDApp):
         """
         comment_preview = ThreeLineAvatarListItem(
             text=publication.title, secondary_text=publication.author,
-            tertiary_text=comment.content)
+            tertiary_text=f'"{comment.content[:20]}..."', ripple_scale=0,
+            font_style='H6', secondary_font_style='Body2',
+            secondary_theme_text_color='Primary')
         comment_preview.add_widget(ImageLeftWidget(source=img_path))
         return comment_preview
 
