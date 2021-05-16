@@ -2,7 +2,7 @@
    <img src="https://i.imgur.com/y5Mx9J4.png" width="500" alt=".bookthink logo">
 </p>
 <h3 align="center">
-   For bookworms to come together and share their love and passion for books.
+   For bookworms to come together and share their love and passion for reading.
 </h3>
 
 ## Technology used
