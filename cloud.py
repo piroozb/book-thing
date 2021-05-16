@@ -21,7 +21,6 @@ def upload_to_bucket(blob_name, file_path):
         return False
 
 # example: uploading a image from my pc
-# path = r'C:\Users\ハオやん\Desktop\movie'
 print(os.getcwd())
 path_parent = os.path.dirname(os.getcwd())
 os.chdir(path_parent)

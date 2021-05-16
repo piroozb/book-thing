@@ -41,9 +41,8 @@ from kivy.uix.behaviors import ButtonBehavior
 # Constant to define demo mode or non-demo mode
 DEMO = True
 
-# load_dotenv('.env')
-# cluster = MongoClient(os.getenv('VAL'))
-cluster = MongoClient("mongodb+srv://mongobookmay2021:HLym97cqPquSYc7m@bookdata.fkavb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+load_dotenv('.env')
+cluster = MongoClient(os.getenv('VAL'))
 db = cluster["BookData"]
 collection = db["books"]
 user_cluster = MongoClient(os.getenv('USER_VAL'))
