@@ -25,56 +25,72 @@ WindowManager:
     pass1: pass1
 
     FloatLayout:
-        size: root.width, root.height/2
+        MDCard:
+            size_hint: None, None
+            size: 300, 400
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            elevation: 10
+            padding: 25
+            spacing: 25
+            orientation: 'vertical'
 
-        Label:
-            text: 'Username: '
-            size_hint: 0.8, 0.2
-            pos_hint: {"x":-0.1, "top":0.8}
-            font_size: (root.width**2 + root.height**2) / 14**4
+            MDLabel:
+                id: welcome_label
+                text: 'WELCOME'
+                font_size: 40
+                halign: 'center'
+                size_hint_y: None
+                height: self.texture_size[1]
+                padding_y: 15
 
-        TextInput:
-            id: user
-            multiline: False
-            pos_hint: {"x":0.5, "top":0.8}
-            size_hint: 0.4, 0.12
-            font_size: (root.width**2 + root.height**2) / 14**4
+            MDTextFieldRound:
+                id: user
+                hint_text: 'username'
+                icon_right: 'account'
+                size_hint_x: None
+                width: 200
+                font_size: 18
+                multiline: False
+                pos_hint: {"center_x":0.5}
 
-        Label:
-            text: 'Password: '
-            size_hint: 0.8, 0.2
-            password: True
-            pos_hint: {"x":-0.1, "top":0.8-0.13*2}
-            font_size: (root.width**2 + root.height**2) / 14**4
 
-        TextInput:
-            id: pass1
-            multiline: False
-            pos_hint: {"x":0.5, "top":0.8-0.13*2}
-            size_hint: 0.4, 0.12
-            password: True
-            font_size: (root.width**2 + root.height**2) / 14**4
 
-        Button:
-            pos_hint:{"x":0.3,"y":0.25}
-            size_hint: 0.4, 0.1
-            font_size: (root.width**2 + root.height**2) / 17**4
-            text: "Don't have an account? Register now."
-            on_release:
-                app.root.current = 'register'
-                root.manager.transition.direction = 'left'
 
-        Button:
-            pos_hint:{"x":0.2,"y":0.05}
-            size_hint: 0.6, 0.15
-            font_size: (root.width**2 + root.height**2) / 14**4
-            text: 'Login'
-            # make it an if else based on what they put (check list of user
-            # or something)
-            on_release:
-                val = root.btn_login()
-                app.root.current = 'home' if val else 'login'
-                root.manager.transition.direction = 'left'
+
+            MDTextFieldRound:
+                id: pass1
+                hint_text: 'password'
+                icon_right: 'eye-off'
+                password: True
+                size_hint_x: None
+                width: 200
+                font_size: 18
+                multiline: False
+                pos_hint: {"center_x":0.5}
+                helper_text: 'Max length 40'
+                helper_text_mode: 'on_error'
+                max_text_length: 40
+
+
+            MDRoundFlatButton:
+                text: 'Login'
+                font_size: 12
+                pos_hint: {'center_x': 0.5}
+                on_release:
+                    val = root.btn_login()
+                    app.root.current = 'home' # if val else 'login'
+                    if val: \
+                    app.update_publication_grid()
+                    root.manager.transition.direction = 'left'
+
+            MDRoundFlatButton:
+                text: "Don't have an account? Register now."
+                font_size: 12
+                pos_hint: {'center_x': 0.5}
+                on_release:
+                    app.root.current = 'register'
+                    root.manager.transition.direction = 'left'
+
 
 <RegisterPage>:
     name: 'register'
@@ -158,7 +174,17 @@ WindowManager:
                         helper_text: "Don't see your book? Search its name to add it!"
                         helper_text_mode: 'on_focus'
 
-                    MDBoxLayout
+                    ScrollView:
+                        do_scroll_x: False
+                        do_scroll_y: True
+                        GridLayout:
+                            id: book_grid
+                            cols: 2
+                            spacing: 10
+                            size_hint_y: None
+                            # do not delete this^ line
+                            size_hint_x: 1
+                            height: self.minimum_height
 
             MDBottomNavigationItem:
                 name: 'feed_page'

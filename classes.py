@@ -57,10 +57,6 @@ class Post:
         - the user that made this rating
     created_on:
         - when the user made this post
-    === Private Attributes ===
-
-
-    === Representation Invariants ===
     """
     content: str
     like: Set[str]
@@ -120,7 +116,7 @@ class Comment(Post):
         super().__init__(content, user_name)
         self.replies = []
 
-    def create_replies(self, new_comment: Comment) -> None:
+    def create_reply(self, new_comment: Comment) -> None:
         """create a reply for the current comment  """
         self.replies.append(new_comment)
 
@@ -239,7 +235,7 @@ class Book(Publication):
     chapters: int
 
     def __init__(self, title: str, author: str, genre: str, pages: int,
-                 chapters: Optional[int]) -> None:
+                 chapters: Optional[int] = None) -> None:
         # Same as Publication.__init__(...)
         super().__init__(title, author, genre)
         self.pages = pages
