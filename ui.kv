@@ -63,10 +63,9 @@ WindowManager:
                 font_size: 12
                 pos_hint: {'center_x': 0.5}
                 on_release:
-                   val = root.btn_login()
+                    val = root.btn_login()
                     app.root.current = 'home' if val else 'login'
-                   if val: \
-                    app.update_publication_grid()
+                    if val: app.update_publication_grid()
                     app.update_recent_comments()
                     root.manager.transition.direction = 'left'
 
