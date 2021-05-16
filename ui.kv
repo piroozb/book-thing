@@ -159,18 +159,49 @@ WindowManager:
 
 <BookPage>:
     name: 'book_info'
-
     MDBoxLayout:
         orientation: 'vertical'
         spacing: self.height / 30
 
-        Image:
-            source: 'images/Demo/Books/1984.png'
-            size_hint_y: 0.8
-            pos_hint: {'top': 0.9}
+
+        GridLayout:
+            cols: 1
+
+            MDToolbar:
+                md_bg_color: (255/255, 139/255, 56/255, 255/255)
+                FloatLayout:
+                    MDIconButton:
+                        icon: 'arrow-left-bold'
+                        pos_hint: {"center": (-0.9, 0.5)}
+                        theme_text_color: "Custom"
+                        text_color: 0, 0, 0, 1
+                        on_press:
+                            app.root.current = 'home'
+                            root.manager.transition.direction = 'right'
+                    Image:
+                        source: 'images/HomePage/logo.png'
+                        size_hint_y: 0.8
+                        pos_hint: {"center": (0, 0.5)}
+
+            GridLayout:
+                id: book_info
+                cols: 2
+                padding: 30
+
+                Image:
+                    source: 'images/Demo/Books/1984.png'
+                    size_hint: None, None
+
+                Label:
+                    id: 'info'
+                    color: (0, 0, 0, 1)
+                    pos_hint: {'top': 0.9, 'x': -1}
+                    text: "Title: 1984 \nAuthor: Ken Kesey \nGenre: Dystopian Fiction \nChapters: 23 \nPages: 328"
 
         Label:
-
+            id: 'book_comments'
+            color: (0, 0, 0, 1)
+            text: "\nuser420: Quite an interesting story \n\nuser001: I wish there was more! Really enjoyed this. \n\nuser489: WTF."
 
 
 <HomePage>:

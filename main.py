@@ -5,11 +5,6 @@ from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivymd.app import MDApp
-from kivymd.uix.button import MDIconButton
-from kivymd.uix.label import MDLabel
-from kivymd.uix.card import MDCard
-from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.utils.fitimage import FitImage
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.list import ThreeLineAvatarListItem, TwoLineAvatarListItem, \
     ImageLeftWidget
@@ -17,10 +12,7 @@ import bcrypt
 from datetime import date
 from pymongo import MongoClient
 from dotenv import load_dotenv
-from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.image import AsyncImage
-from kivy.uix.behaviors import ButtonBehavior
 
 # Constant to define demo mode or non-demo mode
 DEMO = True
