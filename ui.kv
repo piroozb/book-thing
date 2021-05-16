@@ -1,10 +1,8 @@
 WindowManager:
     LoginPage:
     RegisterPage:
-    UserPage:
+    BookPage:
     HomePage:
-#    FeedPage:
-#    BookPage:
 
 <LoginPage>:
     name: 'login'
@@ -160,8 +158,19 @@ WindowManager:
                     app.root.current = 'login'
                     root.manager.transition.direction = 'right'
 
-<UserPage>:
-    name: 'user'
+<BookPage>:
+    name: 'book_info'
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        spacing: self.height / 30
+
+        Image:
+            source: 'images/Demo/Books/1984.png'
+            size_hint_y: 0.8
+            pos_hint: {'top': 0.9}
+
+        Label:
 
 
 

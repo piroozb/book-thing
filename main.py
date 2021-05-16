@@ -17,6 +17,7 @@ from kivy.graphics import Color
 from kivy.graphics import Line
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.image import Image
 from kivy.uix.popup import Popup
 from kivy.core.window import Window
 from kivymd.app import MDApp
@@ -27,7 +28,8 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.utils.fitimage import FitImage
 from kivy.app import App
 from kivymd.uix.dialog import MDDialog
-from kivymd.uix.list import TwoLineAvatarListItem, ImageLeftWidget
+from kivymd.uix.list import ThreeLineAvatarListItem, TwoLineAvatarListItem, \
+    ImageLeftWidget
 import bcrypt
 from datetime import date
 from pymongo import MongoClient
@@ -149,9 +151,9 @@ class BookApp(MDApp):
 
     def update_publication_grid(self, search_keywords: Optional[str] = None) -> None:
         buttons = self.get_publication_buttons(search_keywords)
-        self.root.screens[3].ids.book_grid.clear_widgets()
+        self.root.screens[-1].ids.book_grid.clear_widgets()
         for button in buttons:
-            self.root.screens[3].ids.book_grid.add_widget(button)
+            self.root.screens[-1].ids.book_grid.add_widget(button)
 
     def get_publication_buttons(self, search_keywords: Optional[str] = None
                                 ) -> List[TwoLineAvatarListItem]:
@@ -192,16 +194,6 @@ class BookApp(MDApp):
 
     def build_publication_button(self, img_path: str, publication: Publication
                                  ) -> TwoLineAvatarListItem:
-        # box layout
-        # layout = BoxLayout(orientation='vertical')
-        # # iconbutton at the top (icon will be the book cover)
-        # button = MDIconButton(icon=img_path)
-        # # underneath it put title and author
-        # layout.add_widget(button)
-        # title = MDLabel(text=publication.title, font_style='H6')
-        # layout.add_widget(title)
-        # author = MDLabel(text=f'by {publication.author}', font_style='Caption')
-        # layout.add_widget(author)
         button = TwoLineAvatarListItem(text=publication.title,
                                        secondary_text=publication.author,
                                        on_release=self.change_screens)
@@ -209,15 +201,13 @@ class BookApp(MDApp):
         return button
 
     def change_screens(self, *args) -> None:
-        # placeholder for now
-        self.root.current = 'login'
-        # self.root.current = 'book_info'
+        self.root.current = 'book_info'
 
     def update_recent_comments(self) -> None:
         comments = self.get_recent_comments()
-        self.root.screens[3].ids.recent_posts.clear_widgets()
+        self.root.screens[-1].ids.recent_posts.clear_widgets()
         for comment in comments:
-            self.root.screens[3].ids.recent_posts.add_widget(comment)
+            self.root.screens[-1].ids.recent_posts.add_widget(comment)
 
     def get_recent_comments(self) -> List[BoxLayout]:
         recent_comments = []
@@ -249,14 +239,11 @@ class BookApp(MDApp):
         """
         set up a comment for preview (for profile page)
         """
-        container = MDCard(size_hint=(1, None))
-        box = MDBoxLayout(adaptive_height=True)
-        container.add_widget(Label(text=publication.title))
-        container.add_widget(Label(text=publication.author))
-        container.add_widget(Label(text=comment.content))
-        container.add_widget(ImageLeftWidget(source=img_path))
-        # container.add_widget(Button(text='read more'))
-        return container
+        comment_preview = ThreeLineAvatarListItem(
+            text=publication.title, secondary_text=publication.author,
+            tertiary_text=comment.content)
+        comment_preview.add_widget(ImageLeftWidget(source=img_path))
+        return comment_preview
 
 
 # class PreviousMDIcons(Screen):
