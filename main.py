@@ -23,6 +23,9 @@ from kivy.core.window import Window
 from kivymd.app import MDApp
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.label import MDLabel
+from kivymd.uix.card import MDCard
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.utils.fitimage import FitImage
 from kivy.app import App
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.list import TwoLineAvatarListItem, ImageLeftWidget
@@ -237,22 +240,49 @@ class BookApp(MDApp):
         self.root.current = 'login'
         # self.root.current = 'book_info'
 
-    def update_recent_posts(self) -> None:
-        pass
+    def update_recent_comments(self) -> None:
+        comments = self.get_recent_comments()
+        self.root.screens[3].ids.recent_posts.clear_widgets()
+        for comment in comments:
+            self.root.screens[3].ids.recent_posts.add_widget(comment)
+
+    def get_recent_comments(self) -> List[BoxLayout]:
+        recent_comments = []
+        if DEMO:
+            img_paths = ['images/Demo/Books/1984.png',
+                         'images/Demo/Books/IHaveTheRightToDestroyMyself.png',
+                         'images/Demo/Books/NoPlaceLikeHere.png'
+                         ]
+            books = [Book('1984', 'George Orwell', 'Dystopian Fiction', 328,
+                          23),
+                     Book('I Have The Right To Destroy Myself', 'Young-Ha Kim',
+                          'Fiction', 131),
+                     Book('No Place Like Here', 'Christina June', 'Fiction', 32,
+                          231)
+                     ]
+            comments = [Comment("I hated this book!", "user420"),
+                        Comment("I loved this! Couldn't put it down.", "user001"),
+                        Comment("What a wonderful book!", "user489")
+                        ]
+            for i in range(3):
+                recent_comments.append(self.format_comment_preview(
+                    img_paths[i], books[i], comments[i]))
+            return recent_comments
+        else:
+            pass
 
     def format_comment_preview(self, img_path: str, publication: Publication,
                                comment: Comment) -> BoxLayout:
         """
         set up a comment for preview (for profile page)
         """
-        # container = self.root.screens[3].ids.recent_post1
-        # thingies = [self.root.screens[3].ids.recent_post1,
-        container = BoxLayout(orientation='vertical')
+        container = MDCard(size_hint=(1, None))
+        box = MDBoxLayout(adaptive_height=True)
         container.add_widget(Label(text=publication.title))
         container.add_widget(Label(text=publication.author))
         container.add_widget(Label(text=comment.content))
         container.add_widget(ImageLeftWidget(source=img_path))
-        container.add_widget(Button(text='read more'))
+        # container.add_widget(Button(text='read more'))
         return container
 
 

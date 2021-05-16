@@ -77,10 +77,12 @@ WindowManager:
                 font_size: 12
                 pos_hint: {'center_x': 0.5}
                 on_release:
-                    val = root.btn_login()
-                    app.root.current = 'home' if val else 'login'
-                    if val: \
+                    # TODO get rid of these comments
+#                   val = root.btn_login()
+                    app.root.current = 'home' # if val else 'login'
+#                   if val: \
                     app.update_publication_grid()
+                    app.update_recent_comments()
                     root.manager.transition.direction = 'left'
 
             MDRoundFlatButton:
@@ -151,6 +153,11 @@ WindowManager:
         MDToolbar:
             md_bg_color: (255/255, 139/255, 56/255, 255/255)
             FloatLayout:
+                MDIconButton:
+                    icon: 'book-plus-outline'
+                    pos_hint: {"center": (-0.9, 0.5)}
+                    theme_text_color: "Custom"
+                    text_color: 159/255, 87/255, 35/255, 255/255
                 Image:
                     source: 'images/HomePage/logo.png'
                     size_hint_y: 0.8
@@ -213,9 +220,7 @@ WindowManager:
                 text: 'Profile'
                 icon: 'account-circle'
 
-                MDBoxLayout:
-                    orientation: 'vertical'
-                    spacing: self.height / 40
+                FloatLayout:
 
                     Image: # profile pic
                         source:'images/Demo/Profile/person1.png'
@@ -230,11 +235,12 @@ WindowManager:
                     Label: # bio
                         pos_hint: {"center_x": 0.5}
                         color: (0, 0, 0, 1)
-                        text: "Insert an interesting bio here. Or quirky jokes."
+                        text: "Insert an interesting bio here.\nOr quirky jokes."
 
-                        BoxLayout: # container for 3 posts
-                            orientation: 'vertical'
-                            id: recent_posts
+
+                    BoxLayout: # container for 3 posts
+                        orientation: 'vertical'
+                        id: recent_posts
 
 #                            MDBoxLayout:
 #                                id: recent_post1
