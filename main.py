@@ -26,7 +26,6 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.card import MDCard
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.utils.fitimage import FitImage
-from kivy.app import App
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.list import ThreeLineAvatarListItem, TwoLineAvatarListItem, \
     ImageLeftWidget
@@ -34,6 +33,10 @@ import bcrypt
 from datetime import date
 from pymongo import MongoClient
 from dotenv import load_dotenv
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.image import AsyncImage
+from kivy.uix.behaviors import ButtonBehavior
 
 # Constant to define demo mode or non-demo mode
 DEMO = True
@@ -43,9 +46,9 @@ DEMO = True
 cluster = MongoClient("mongodb+srv://mongobookmay2021:HLym97cqPquSYc7m@bookdata.fkavb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 db = cluster["BookData"]
 collection = db["books"]
-user_cluster = MongoClient('mongodb+srv://pillscapsules:EqOhsaXcdMCGQ1qp@cluster0.pzl0j.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
-db_user = cluster['UserData']
-collection_user = db['BookThink']
+user_cluster = MongoClient(os.getenv('USER_VAL'))
+db_user = user_cluster['UserData']
+collection_user = db_user['BookThink']
 
 ERROR = ["Registry failed: passwords doesn't match!",
          'Registry failed: invalid password!',
@@ -131,12 +134,18 @@ class RegisterPage(Screen):
             return True
 
 
-class UserPage(Screen):
-    pass
-
-
 class HomePage(Screen):
     pass
+
+
+class BookPage(Screen):
+    img_path = 'images/Demo/Books/1984.png'
+    book = Book('1984', 'George Orwell', 'Dystopian Fiction', 328, 23)
+    comments = [Comment("I hated this book!", "user420"),
+                Comment("I loved this! Couldn't put it down.", "user001"),
+                Comment("What a wonderful book!", "user489")]
+
+
 
 
 class WindowManager(ScreenManager):
