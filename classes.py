@@ -37,12 +37,16 @@ class User:
         self._join_date = date.today()
         self.favourites = []
         self.bio = ''
+        self.notifications = []
 
     def add_favourite(self, publication: Publication) -> None:
         self.favourites.append(publication)
 
     def add_bio(self, bio: str) -> None:
         self.bio = bio
+
+    def add_notification(self, auth: Publication) -> None:
+        self.notifications.append(auth)
 
 
 class Post:

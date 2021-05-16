@@ -1,7 +1,6 @@
 from typing import Optional, List
 from classes import Publication, Book, Comment
 import os
-
 import kivy
 from kivy.app import App
 from kivy.uix.label import Label
@@ -30,7 +29,6 @@ from kivy.app import App
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.list import TwoLineAvatarListItem, ImageLeftWidget
 import bcrypt
-import json
 from datetime import date
 from pymongo import MongoClient
 from dotenv import load_dotenv
@@ -42,6 +40,10 @@ load_dotenv('.env')
 cluster = MongoClient(os.getenv('VAL'))
 db = cluster["BookData"]
 collection = db["books"]
+user_cluster = MongoClient('mongodb+srv://pillscapsules:EqOhsaXcdMCGQ1qp@cluster0.pzl0j.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+db_user = cluster['UserData']
+collection_user = db['BookThink']
+
 ERROR = ["Registry failed: passwords doesn't match!",
          'Registry failed: invalid password!',
          'Registry failed: username already taken!',
@@ -50,20 +52,12 @@ ERROR = ["Registry failed: passwords doesn't match!",
 
 
 # helper function
-def fail_popup(retype: bool) -> None:
-    show = Pop2() if retype else Pop()
+def fail_popup(retype: int) -> None:
+    show = ERROR[retype]
 
-    popup_win = Popup(title='Error', content=show, size_hint=(None, None),
-                      size=(350, 100))
+    popup_win = MDDialog(title='Error',
+                         text=show, size=(.5, .5))
     popup_win.open()
-
-
-class Pop(FloatLayout):
-    pass
-
-
-class Pop2(FloatLayout):
-    pass
 
 
 class LoginPage(Screen):
@@ -71,26 +65,15 @@ class LoginPage(Screen):
     pass1 = ObjectProperty(None)
 
     def btn_login(self) -> bool:
+        """Method for when someone tries to log in"""
         user = self.user.text
         password = self.pass1.text.encode()
-        data_user = collection.find_one({"_id": user})
         # gets the information from the database.
-
-        # if os.path.getsize('user.json') > 0:
-        #     file = open('user.json')
-        #     user_dict = json.load(file)
-        # else:
-        #     fail_popup(False)
-        #     return False
-        # if user not in user_dict:
-        #     fail_popup(False)
-        #     return False
-
+        data_user = collection_user.find_one({"_id": user})
         if data_user is None:
-            fail_popup(False)
+            fail_popup(4)
             return False
         else:
-            # hashed = user_dict[user][0]
             # currently hashed is a str of the hashed password
             hashed = data_user["password"]
         # clears textbox
@@ -99,7 +82,7 @@ class LoginPage(Screen):
         if bcrypt.checkpw(password, hashed.encode()):
             return True
         else:
-            fail_popup(True)
+            fail_popup(4)
             return False
 
 
@@ -110,9 +93,15 @@ class RegisterPage(Screen):
     pass2 = ObjectProperty(None)
 
     def btn_register(self) -> bool:
-        if self.pass1.text != self.pass2.text or 40 < len(self.user.text) or\
-                len(self.user.text) < 8 or ' ' in self.pass1.text:
-            fail_popup(True)
+        """Method for when someone tries to register"""
+        # checks if passwords match, has the right characters and is not too
+        # long/short
+        if self.pass1.text != self.pass2.text:
+            fail_popup(0)
+            return False
+        elif 40 < len(self.pass1.text) or len(self.pass1.text) < 8 \
+                or ' ' in self.pass1.text:
+            fail_popup(1)
             self.pass1.text = self.user.text = self.pass2.text = ''
             return False
         # converts password to bytes then encrypts it.
@@ -121,31 +110,22 @@ class RegisterPage(Screen):
         # TODO: maybe add more rounds to make the password take longer to
         #  hash (for more security).
         hashed = bcrypt.hashpw(password, bcrypt.gensalt(rounds=12))
-        data_user = collection.find_one({"_id": user})
-
-        # if os.path.getsize('user.json') > 0:
-        #     file = open('user.json', 'r')
-        #     user_dict = json.load(file)
-        # else:
-        #     user_dict = {}
-
+        data_user = collection_user.find_one({"_id": user})
         self.pass1.text = self.user.text = self.pass2.text = ''
-        if data_user is not None or 32 < len(user) or \
-                len(user) < 6 or ' ' in user:
-            fail_popup(False)
+        # checks if user already exists, has the right characters and is not too
+        # long/short
+        if data_user is not None:
+            fail_popup(2)
+            return False
+        elif 32 < len(user) or len(user) < 6 or ' ' in user:
+            fail_popup(3)
             return False
         else:
-            collection.insert_one({"_id": user, "password": hashed.decode(),
-                                   "date": str(date.today())})
+            # uploads info to the database
+            collection_user.insert_one({"_id": user,
+                                        "password": hashed.decode(),
+                                        "date": str(date.today())})
             return True
-        # if user in user_dict.keys() or 6 > len(user) > 32:
-        #     fail_popup(False)
-        #     return False
-        # else:
-        #     user_dict[user] = [str(hashed), str(date.today()), '0']
-        #     with open('user.json', 'w') as f:
-        #         json.dump(user_dict, f)
-        #     return True
 
 
 class UserPage(Screen):
@@ -154,14 +134,6 @@ class UserPage(Screen):
 
 class HomePage(Screen):
     pass
-
-
-# class FeedPage(Screen):
-#     pass
-#
-#
-# class BookPage(Screen):
-#     pass
 
 
 class WindowManager(ScreenManager):
