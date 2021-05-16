@@ -122,11 +122,7 @@ class HomePage(Screen):
 
 
 class BookPage(Screen):
-    img_path = 'images/Demo/Books/1984.png'
-    book = Book('1984', 'George Orwell', 'Dystopian Fiction', 328, 23)
-    comments = [Comment("I hated this book!", "user420"),
-                Comment("I loved this! Couldn't put it down.", "user001"),
-                Comment("What a wonderful book!", "user489")]
+    pass
 
 
 
