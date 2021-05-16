@@ -4,6 +4,7 @@
 <h3 align="center">
    For book lovers to come together and share their interest in books.
 </h3>
+
 ## Technology used
 -   Python (back-end)
 -   Kivy (front-end)
