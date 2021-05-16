@@ -18,6 +18,9 @@ class User:
         - all of the user's favourite publications
     bio:
         - biography of the user
+    notifications:
+        - the list of notifications
+
 
     === Private Attributes ===
     _join_date:
@@ -29,7 +32,7 @@ class User:
     _join_date: date
     favourites: List[Publication]
     bio: str
-    # list? Dict?
+    notifications: List[Publication]
 
     def __init__(self, user_name: str) -> None:
         self.user_name = user_name

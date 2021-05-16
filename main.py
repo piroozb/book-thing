@@ -36,8 +36,9 @@ from dotenv import load_dotenv
 # Constant to define demo mode or non-demo mode
 DEMO = True
 
-load_dotenv('.env')
-cluster = MongoClient(os.getenv('VAL'))
+# load_dotenv('.env')
+# cluster = MongoClient(os.getenv('VAL'))
+cluster = MongoClient("mongodb+srv://mongobookmay2021:HLym97cqPquSYc7m@bookdata.fkavb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 db = cluster["BookData"]
 collection = db["books"]
 user_cluster = MongoClient('mongodb+srv://pillscapsules:EqOhsaXcdMCGQ1qp@cluster0.pzl0j.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
