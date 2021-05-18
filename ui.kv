@@ -197,6 +197,12 @@ WindowManager:
                     pos_hint: {'top': 0.9, 'x': -1}
                     text: "Title: 1984 \nAuthor: Ken Kesey \nGenre: Dystopian Fiction \nChapters: 23 \nPages: 328"
 
+                Label:
+                    id: 'info'
+                    color: (0, 0, 0, 1)
+                    pos_hint: {'top': 0.9, 'x': -1}
+                    text: "Title: 1984 \nAuthor: Ken Kesey \nGenre: Dystopian Fiction \nChapters: 23 \nPages: 328"
+
         Label:
             id: 'book_comments'
             color: (0, 0, 0, 1)
@@ -261,6 +267,13 @@ WindowManager:
                 MDBoxLayout:
                     orientation: 'vertical'
 
+
+        TextInput:
+            id: 'new_comment'
+            width: 200
+            font_size: 18
+            multiline: False
+            icon_right: 'comment'
 
 
 # this is code for personal profile page
